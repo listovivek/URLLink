@@ -8,3 +8,45 @@ http://www.vetbossel.in/android-json-parsing-from-url/
 
 multiple checkbox in spinner dropbox android
 https://stackoverflow.com/questions/38417984/android-spinner-dropdown-checkbox
+
+@Override
+        protected String doInBackground(String... params) {
+
+            RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+            String url = "http://192.168.0.226:10534/api/vehicle/GetVehicleListByDriverId/2";
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new
+                    com.android.volley.Response.Listener<String>() {
+                @Override
+                public void onResponse(String s) {
+                    Log.d("", s.toString());
+                }
+            }, new com.android.volley.Response.ErrorListener() {
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(MainActivity.this ,error.getMessage(), Toast.LENGTH_SHORT).show();
+                    //Log.e("GetVehicleByImeiService : Error", error.getMessage());
+                }
+            });
+            stringRequest.setRetryPolicy(new RetryPolicy() {
+                @Override
+                public int getCurrentTimeout() {
+                    return 50000;
+                }
+
+                @Override
+                public int getCurrentRetryCount() {
+                    return 50000;
+                }
+
+                @Override
+                public void retry(VolleyError error) throws VolleyError {
+
+                }
+            });
+            queue.add(stringRequest);
+
+            return null;
+        }
+    }
